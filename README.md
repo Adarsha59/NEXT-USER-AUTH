@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# User Authentication and Email Verification in Next.js
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This project implements user authentication features such as signup, email verification, login, and data retrieval using Next.js. It utilizes Mailtrap for email verification and Nodemailer for sending emails. The backend requests are tested using the Thunder Client extension in Visual Studio Code.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **User Signup**: Allows users to create an account by providing their email.
+- **Email Verification**: Sends a verification email to the user's email address using Mailtrap. Users must verify their email to activate their account.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- **User Login**: Authenticates users and manages sessions using cookies.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Retrieve User Data**: Provides a way to access the logged-in user's data.
 
-## Learn More
+- **Logout Functionality**: Allows users to log out and clear their session.
 
-To learn more about Next.js, take a look at the following resources:
+## Tools and Technologies
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js**: A React framework for building server-rendered applications.
+- **Nodemailer**: A module for Node.js to send emails.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Mailtrap**: A tool for testing email sending in development. More information can be found at [Mailtrap](https://mailtrap.io/inboxes).
 
-## Deploy on Vercel
+- **Thunder Client**: A lightweight API client for testing backend requests directly within Visual Studio Code.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Learning Journey
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+As a beginner, I have learned how to:
+
+1. Implement user authentication features in a web application.
+2. Use Nodemailer for sending verification emails.
+3. Test API endpoints using Thunder Client.
+4. Manage user sessions with cookies.
+
+This project serves as a foundational step in my journey to becoming proficient in web development with Next.js.
+
+## Author
+
+**Adarsha Paudyal**
+
+- GitHub: [Adarsha59](https://github.com/Adarsha59/)
+
+## Conclusion
+
+This README outlines the core components of my user authentication project in Next.js. As I continue to learn, I aim to enhance this project with additional features and improvements.
