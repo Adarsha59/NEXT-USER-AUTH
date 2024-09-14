@@ -1,32 +1,53 @@
 import connectDB from "@/libs/connectMongoDB";
 import UserData from "@/models/user.model";
 import { NextResponse } from "next/server";
-import mailHelper from "@/utils/mailHelper";
-const bcrypt = require("bcrypt");
-export async function POST(req) {
+
+export async function GET(req) {
   try {
+    // Connect to the database
     await connectDB();
-    // Parse the request body (use req.json() in the Next.js App Router)
-    const { token } = req.json();
-    console.log("token: " + token);
-    // Verify the token and get the user ID
+
+    // Extract the token from the query parameters
+    const { searchParams } = new URL(req.url);
+    const token = searchParams.get("token");
+
+    if (!token) {
+      return NextResponse.json({
+        success: false,
+        message: "Verification token is missing",
+      });
+    }
+
+    // Find user with matching token and ensure it's not expired
     const user = await UserData.findOne({
       verifyToken: token,
       verifyTokenExpiration: { $gt: Date.now() },
     });
+
     if (!user) {
-      throw new Error("Invalid or expired verification token");
+      return NextResponse.json({
+        success: false,
+        message: "Invalid or expired verification token",
+      });
     }
-    // Mark the user as verified and remove the verification token
+
+    // Update user status to verified
     await UserData.findByIdAndUpdate(user._id, {
       isVarified: true,
       verifyToken: null,
       verifyTokenExpiration: null,
     });
 
-    return NextResponse.json({ message: "Email verified successfully" });
+    return NextResponse.json({
+      success: true,
+      message: "Email verified successfully",
+    });
   } catch (error) {
-    console.error("Error verifying email: ", error);
-    return NextResponse.json({ message: "Failed to verify email" });
+    console.error("Error verifying email:", error);
+    return NextResponse.json({
+      success: false,
+      message: "Failed to verify email",
+      error: error.message || "Internal server error",
+    });
   }
 }
