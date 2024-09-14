@@ -8,13 +8,17 @@ const mailHelper = async ({ email, emailType, userId }) => {
     const token = await bcrypt.hash(userId.toString(), 10);
     if (emailType === "VERIFY") {
       await UserData.findByIdAndUpdate(userId, {
-        verifyToken: token,
-        verifyTokenExpiration: Date.now() + 3600000, // 1 hour
+        $set: {
+          verifyToken: token,
+          verifyTokenExpiration: Date.now() + 3600000, // 1 hour
+        },
       });
     } else if (emailType === "RESET") {
       await UserData.findByIdAndUpdate(userId, {
-        resetToken: token,
-        resetTokenExpiration: Date.now() + 3600000, // 1 hour
+        $set: {
+          resetToken: token,
+          resetTokenExpiration: Date.now() + 3600000, // 1 hour
+        },
       });
     } else {
       throw new Error("Invalid email type");
@@ -44,20 +48,20 @@ const mailHelper = async ({ email, emailType, userId }) => {
       emailType === "VERIFY" ? "verify" : "reset"
     } your email address by clicking the following link:</p>
     
-    <a href="http://localhost:3000/verify/${token}">Verify</a>
+    <a href="http://localhost:3000/api/users/verify/${token}">Verify</a>
     
     ${
       emailType === "RESET"
         ? `
     <p>If you didn't request a password reset, please ignore this email.</p>
     <p>Your password reset token is valid for 1 hour.</p>
-    <a href="http://localhost:3000/reset/${token}">Reset Password</a>
+    <a href="http://localhost:3000/api/users/reset?token=${token}">Reset Password</a>
     `
         : `
     
     <p>If you didn't request a verification, please ignore this email.</p>
     <p>Your verification token is valid for 1 hour.</p>
-    <a href="http://localhost:3000/verify/${token}">Verify</a>
+    <a href="http://localhost:3000/verify?token=${token}">Verify</a>
     `
     }
     `,
