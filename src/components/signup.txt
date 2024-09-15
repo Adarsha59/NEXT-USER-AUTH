@@ -1,34 +1,19 @@
 "use client";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+
 const SignupForm = () => {
-  const router = useRouter();
-
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      console.log("Form Data Submitted:", formData);
-      await axios.post("http://localhost:3000/api/users/signup", formData);
-      toast.success("Signup successful!");
-      router.push("/login"); // Redirect to home page after successful signup
-    } catch (error) {
-      toast.error(error);
-    }
+  const onSubmit = (data) => {
+    console.log(data);
   };
 
   const togglePasswordVisibility = () => {
@@ -40,71 +25,86 @@ const SignupForm = () => {
       <div className="w-full max-w-md">
         <form
           className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl p-8 transform hover:scale-105 transition-all duration-300 ease-in-out"
-          onSubmit={handleSubmit} // Move onSubmit here to the form
+          onSubmit={handleSubmit(onSubmit)} // Form submission handling
         >
           <h2 className="text-3xl font-bold text-center text-white mb-8">
             Sign Up
           </h2>
 
+          {/* Username Field */}
           <div className="mb-6 relative">
             <input
               type="text"
               id="username"
-              name="username"
-              onChange={handleChange}
-              value={formData.username}
+              {...register("username", { required: "Username is required" })}
               className="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 text-white placeholder-gray-300 outline-none transition-all duration-300"
               placeholder="Username"
-              required
             />
+            {errors.username && (
+              <span className="text-red-500 text-sm">
+                {errors.username.message}
+              </span>
+            )}
             <label
               htmlFor="username"
-              className={`absolute left-4 top-3 text-gray-300 transition-all duration-300 ${
-                formData.username ? "-top-6 text-sm text-purple-300" : ""
-              }`}
+              className="absolute left-4 top-3 text-gray-300"
             >
               Username
             </label>
           </div>
 
+          {/* Email Field */}
           <div className="mb-6 relative">
             <input
               type="email"
               id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: "Invalid email format",
+                },
+              })}
               className="w-full pl-10 pr-4 py-3 rounded-lg bg-opacity-20 bg-white border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 text-white placeholder-gray-300 outline-none transition-all duration-300"
               placeholder="Email"
-              required
             />
+            {errors.email && (
+              <span className="text-red-500 text-sm">
+                {errors.email.message}
+              </span>
+            )}
             <label
               htmlFor="email"
-              className={`absolute left-10 top-3 text-gray-300 transition-all duration-300 ${
-                formData.email ? "-top-6 text-sm text-purple-300" : ""
-              }`}
+              className="absolute left-10 top-3 text-gray-300"
             >
               Email
             </label>
             <FaEnvelope className="absolute left-3 top-4 text-gray-300" />
           </div>
 
+          {/* Password Field */}
           <div className="mb-6 relative">
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+              })}
               className="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 text-white placeholder-gray-300 outline-none transition-all duration-300"
               placeholder="Password"
-              required
             />
+            {errors.password && (
+              <span className="text-red-500 text-sm">
+                {errors.password.message}
+              </span>
+            )}
             <label
               htmlFor="password"
-              className={`absolute left-4 top-3 text-gray-300 transition-all duration-300 ${
-                formData.password ? "-top-6 text-sm text-purple-300" : ""
-              }`}
+              className="absolute left-4 top-3 text-gray-300"
             >
               Password
             </label>
@@ -117,6 +117,7 @@ const SignupForm = () => {
             </button>
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition-all duration-300 transform hover:scale-105"
@@ -124,6 +125,7 @@ const SignupForm = () => {
             Sign Up
           </button>
 
+          {/* Forgot Password */}
           <div className="text-center mt-4">
             <a
               href="#"

@@ -1,6 +1,8 @@
 import connectDB from "@/libs/connectMongoDB";
 import UserData from "@/models/user.model";
 import { NextResponse } from "next/server";
+import Cookies from "js-cookie";
+
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 export async function POST(req) {

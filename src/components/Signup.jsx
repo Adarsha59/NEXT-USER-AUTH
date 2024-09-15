@@ -1,11 +1,10 @@
 "use client";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
+
 const SignupForm = () => {
-  const router = useRouter();
+  console.log("hi there"); // This will now log correctly when the component is rendered
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -23,9 +22,11 @@ const SignupForm = () => {
     try {
       e.preventDefault();
       console.log("Form Data Submitted:", formData);
-      await axios.post("http://localhost:3000/api/users/signup", formData);
+      const Response = await axios.post(
+        "http://localhost:3000/api/users/signup",
+        formData
+      );
       toast.success("Signup successful!");
-      router.push("/login"); // Redirect to home page after successful signup
     } catch (error) {
       toast.error(error);
     }
@@ -51,8 +52,8 @@ const SignupForm = () => {
               type="text"
               id="username"
               name="username"
-              onChange={handleChange}
               value={formData.username}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 text-white placeholder-gray-300 outline-none transition-all duration-300"
               placeholder="Username"
               required
